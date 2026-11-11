@@ -1,8 +1,10 @@
 # Home OS Emulator
 
-A QEMU based ARM64 test environment for future Home OS builds. **This repository is the emulator, not the operating system.** Until a Home OS guest is available, it can boot a small Alpine Linux prototype into a serial shell to check that the virtual machine works.
+A QEMU based ARM64 test environment and desktop launcher for Home OS. **This repository is the emulator, not the operating system.** The desktop launcher opens the adjacent `Home OS` project's phone UI, while `launch.sh` remains available for serial guest testing.
 
-The prototype is text only. It does not provide a phone interface, app store, or Home OS services.
+The standalone prototype guest is text only. The desktop launcher displays the Home OS phone shell and starts its ARM64 guest for supported functions.
+
+Both launchers give the guest a virtual network adapter. QEMU shares the computer's active connection, including Wi-Fi, through user mode networking. The guest cannot scan or change the computer's physical Wi-Fi settings. In the phone UI, Quick Settings shows whether the host Wi-Fi is connected.
 
 ## Requirements
 
@@ -37,15 +39,15 @@ The prototype is text only. It does not provide a phone interface, app store, or
 
    This downloads Alpine Linux's ARM64 `virt` kernel and initramfs and adds the startup script in `prototype-init`. The resulting `guest/Image` and `guest/initramfs.cpio.gz` are local build assets. This step is required only once unless you want to rebuild or refresh them.
 
-4. Launch the emulator:
+4. Place this repository beside the `Home OS` project and launch the phone UI:
 
    ```sh
    ./launch-desktop.sh
    ```
 
-   A QTerminal window should show the boot log, followed by `Home OS emulator prototype guest` and a `~ #` shell prompt. For a terminal only session, run `./launch.sh` instead. On a Kali installation without a desktop, use `./launch.sh` from a terminal or SSH session.
+   The borderless, rounded phone window uses the Home OS elephant logo as its application icon. Drag its top edge to move it. Use **Alt+F4** to close it. Set `HOME_OS_ROOT=/path/to/Home OS` if the project is elsewhere. For a terminal only serial prototype session, run `./launch.sh` instead.
 
-5. Stop QEMU by pressing **Ctrl+A**, then **X** in its console window. Close the current emulator before launching another instance with the same disk.
+5. In the serial prototype console, stop QEMU by pressing **Ctrl+A**, then **X**. Close the current emulator before launching another instance with the same disk.
 
 ## What the launcher creates
 
@@ -73,7 +75,7 @@ Set `HOME_OS_DISK=/absolute/path/to/test.qcow2` to keep that build's test disk s
 ## Troubleshooting
 
 - **`Missing guest asset`**: run `./prepare-prototype.sh` again, or set `HOME_OS_KERNEL` and `HOME_OS_INITRD` to valid files.
-- **No desktop window**: check that you are logged into an X11 desktop, then use `./launch-desktop.sh`. Use `./launch.sh` for a terminal session.
+- **No desktop window**: check that you are logged into an X11 desktop and that the adjacent `Home OS` project exists, then use `./launch-desktop.sh`. Use `./launch.sh` for a terminal session.
 - **Virtual disk is locked**: another emulator instance is using the same disk. Stop it or set `HOME_OS_DISK` to a different path.
 - **QEMU opens but does not reach the shell**: inspect the newest file in `logs/` and confirm that the kernel and initramfs are both ARM64 and match each other.
 

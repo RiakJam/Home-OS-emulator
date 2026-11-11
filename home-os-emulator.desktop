@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Home OS Emulator
+Comment=Run the Home OS phone emulator
+Exec="/home/wande/Desktop/Apps/Home OS Emulator/launch-desktop.sh"
+Icon=/home/wande/Desktop/Apps/Home OS Emulator/assets/home-os-emulator.png
+Terminal=false
+Categories=System;Emulator;
+StartupNotify=true
+StartupWMClass=Homeosemulator

@@ -1,0 +1,17 @@
+#!/bin/sh
+/bin/busybox mount -t proc proc /proc
+/bin/busybox mount -t sysfs sysfs /sys
+/bin/busybox mount -t devtmpfs devtmpfs /dev
+/bin/busybox modprobe virtio_net 2>/dev/null || true
+for attempt in 1 2 3 4 5; do
+  /bin/busybox ip link show eth0 >/dev/null 2>&1 && break
+  /bin/busybox sleep 1
+done
+if /bin/busybox ip link show eth0 >/dev/null 2>&1; then
+  /bin/busybox ip link set eth0 up
+  /bin/busybox ip addr add 10.0.2.15/24 dev eth0
+  /bin/busybox ip route add default via 10.0.2.2
+  printf 'nameserver 10.0.2.3\n' > /etc/resolv.conf
+fi
+printf '\nHome OS emulator prototype guest\nARM64 serial console ready. This is a temporary Linux test guest.\n\n'
+exec /bin/sh </dev/console >/dev/console 2>&1
